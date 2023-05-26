@@ -1,0 +1,29 @@
+{
+  "root": true,
+  "extends": [
+    "@nuxt/eslint-config"
+  ],
+  "rules": {
+    "vue/script-indent": [
+      "error",
+      2
+    ],
+    "@typescript-eslint/indent": [
+      "error",
+      2
+    ],
+    "no-trailing-spaces": "error",
+    "semi": [
+      "error",
+      "always"
+    ],
+    "keyword-spacing": "warn",
+    "key-spacing": "warn",
+    "space-infix-ops": "warn",
+    "switch-colon-spacing": "warn",
+    "object-curly-spacing": [
+      "warn",
+      "always"
+    ]
+  }
+}
