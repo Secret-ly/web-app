@@ -17,6 +17,29 @@
     <v-btn @click="logout">
       Logout
     </v-btn>
+
+    <div>
+      Name: {{ userProfile?.name }}
+    </div>
+    <div>
+      Public Key: {{ userPublicKey }}
+    </div>
+
+    <v-text-field v-model="fullname" />
+    <v-btn @click="updateUserProfile({name: fullname})">
+      Update
+    </v-btn>
+
+    <div>
+      Profile: {{ userProfile }}
+    </div>
+
+    <v-text-field v-model="userPub" />
+    <v-btn @click="getUserProfile(userPub)">
+      Update
+    </v-btn>
+
+    <div>{{ $GUN.SEA.err }}</div>
   </div>
 </template>
 
@@ -27,10 +50,12 @@ definePageMeta({
   shouldAuth: true
 });
 
-const { logout } = useAuthentication();
+const { logout, getUserProfile, userProfile, updateUserProfile, userPublicKey } = useAuthentication();
 const { coords, locatedAt } = useUserLocation();
 
 const distance = ref(0);
+const fullname = ref('');
+const userPub = ref('');
 
 const getDistance = () => {
   distance.value = haversine(
@@ -38,5 +63,7 @@ const getDistance = () => {
     { latitude: 20.9967893, longitude: 105.84077260000001 }
   );
 };
+
+getUserProfile();
 </script>
 

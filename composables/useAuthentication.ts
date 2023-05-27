@@ -1,13 +1,17 @@
 import useAuthStore from "~/stores/authStore";
 import { CreateUserResult, AuthenticateResult } from "~/types/gun";
+import { UserProfile } from "~/types/user";
 
 export const useAuthentication = () => {
-  const { $user } = useNuxtApp();
+  const { $user, $db } = useNuxtApp();
   const authStore = useAuthStore();
   const router = useRouter();
-  const { username, isLoggingIn } = storeToRefs(authStore);
+  const { username, isLoggingIn, userProfile, } = storeToRefs(authStore);
 
   const isAuthenticated = computed(() => !!$user.is);
+
+  const userPublicKey = computed(() => $user.is?.pub ?? '');
+  const userEncryptionKey = computed(() => $user.is?.epub ?? '');
 
   const login = (u: string, p: string) => {
     isLoggingIn.value = true;
@@ -21,6 +25,7 @@ export const useAuthentication = () => {
       }
 
       username.value = result.put?.alias ?? '';
+
       router.push({ name: 'index' });
     });
   };
@@ -49,14 +54,31 @@ export const useAuthentication = () => {
     void router.push({ name: 'login' });
   };
 
+  const getUserProfile = async (pub?: string) => {
+    if (pub) {
+      userProfile.value = await $db.user(pub).get<UserProfile>('profile').then();
+      return;
+    }
+    userProfile.value = await $user.get<UserProfile>('profile').then();
+  };
+
+  const updateUserProfile = async (data: Partial<UserProfile>) => {
+    $user.get<UserProfile>('profile').put(data);
+  };
+
   return {
     username,
     isAuthenticated,
     isLoggingIn,
+    userProfile,
+    userEncryptionKey,
+    userPublicKey,
 
     login,
     createAccount,
     setUsername,
-    logout
+    logout,
+    getUserProfile,
+    updateUserProfile
   };
 };
