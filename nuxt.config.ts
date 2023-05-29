@@ -34,7 +34,4 @@ export default defineNuxtConfig({
       apiEndpoint: 'endpoint'
     }
   },
-  devServer: {
-    https: true
-  }
 });

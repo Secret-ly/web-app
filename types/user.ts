@@ -1,3 +1,4 @@
 export type UserProfile = {
-  name: string
+  name: string,
+  secret: string,
 }
